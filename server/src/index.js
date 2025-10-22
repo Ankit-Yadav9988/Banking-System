@@ -5,12 +5,17 @@ const authRoutes = require('./routes/auth');
 require('dotenv').config();
 const bcrypt = require('bcryptjs');
 
-
 console.log('EMAIL_USER:', process.env.EMAIL_USER); // Should print your email
 console.log('EMAIL_PASS:', process.env.EMAIL_PASS); // Should print your password
 
 const app = express();
-app.use(cors());
+
+// ✅ CORS config to allow your Vercel frontend to communicate with this backend
+app.use(cors({
+  origin: 'https://banking-system-six-psi.vercel.app', // Your frontend URL
+  credentials: true
+}));
+
 app.use(express.json());
 
 // MongoDB Connection
@@ -21,7 +26,8 @@ mongoose.connect(process.env.MONGO_URI, {
   .then(() => console.log('MongoDB connected'))
   .catch(err => console.log(err));
 
-  app.use('/api/auth', authRoutes);
+// Routes
+app.use('/api/auth', authRoutes);
 
 app.get('/', (req, res) => {
   res.send('Banking System API');
