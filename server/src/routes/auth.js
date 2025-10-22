@@ -4,7 +4,8 @@ const User = require('../models/User');
 const Bank = require('../models/Bank');
 const Account = require('../models/Account');
 const Transaction = require('../models/Transaction');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
+
 const { Types } = require('mongoose');
 require('dotenv').config();
 
