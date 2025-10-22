@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import API_URL from '../apiConfig'; // ✅ import your API base URL 
 
 const OpenAccount = () => {
   const [name, setName] = useState('');
@@ -12,9 +11,9 @@ const OpenAccount = () => {
   const [message, setMessage] = useState('');
 
   useEffect(() => {
-    // ✅ Fetch available banks from Render backend
+    // Fetch available banks
     axios
-      .get(`${API_URL}/api/auth/banks`)
+      .get('https://banking-system-jajy.onrender.com/api/auth/banks')
       .then(res => setBanks(res.data))
       .catch(err => console.error('Fetch Banks Error:', err));
   }, []);
@@ -22,8 +21,8 @@ const OpenAccount = () => {
   const handleSignupAndOpenAccount = async (e) => {
     e.preventDefault();
     try {
-      // Signup user
-      const signupRes = await axios.post(`${API_URL}/api/auth/signup`, {
+      // Signup
+      const signupRes = await axios.post('https://banking-system-jajy.onrender.com/api/auth/signup', {
         name,
         email,
         phone,
@@ -31,8 +30,8 @@ const OpenAccount = () => {
       });
       const userId = signupRes.data.userId;
 
-      // Open account for user
-      const accountRes = await axios.post(`${API_URL}/api/auth/open-account`, {
+      // Open account
+      const accountRes = await axios.post('https://banking-system-jajy.onrender.com/api/auth/open-account', {
         userId,
         bankId,
         accountHolderName: name,
@@ -67,4 +66,4 @@ const OpenAccount = () => {
   );
 };
 
-export default OpenAccount; 
+export default OpenAccount;
