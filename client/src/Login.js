@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-import API_URL from './apiConfig'; // Added import for API_URL
 import './styles.css';
 
 const Login = ({ onClose }) => {
@@ -18,40 +17,60 @@ const Login = ({ onClose }) => {
       const payload = isManager
         ? { name, password, bankName }
         : { email, password };
-      const res = await axios.post(`${API_URL}/api/auth/login`, payload); // Updated to use API_URL
+
+      // ✅ Hardcoded backend URL
+      const res = await axios.post(
+        'https://banking-system-jajy.onrender.com/api/auth/login',
+        payload
+      );
+
       setMessage(res.data.msg);
       localStorage.setItem('userId', res.data.userId);
       localStorage.setItem('role', res.data.role);
+
+      // ✅ Redirect after login
       setTimeout(() => {
-        if (res.data.role === 'customer') window.location.href = '/customer-dashboard';
-        else if (res.data.role === 'manager') window.location.href = '/admin-dashboard';
-        if (onClose) onClose(); // Close modal if used in modal context
+        if (res.data.role === 'customer')
+          window.location.href = '/customer-dashboard';
+        else if (res.data.role === 'manager')
+          window.location.href = '/admin-dashboard';
+        if (onClose) onClose();
       }, 1000);
     } catch (err) {
       console.error('Login Error:', err);
-      setMessage(err.response?.data?.msg || err.response?.data?.error || 'Login failed');
+      setMessage(
+        err.response?.data?.msg ||
+          err.response?.data?.error ||
+          'Login failed'
+      );
     }
   };
 
-  // Show logout link if logged in
+  // ✅ Show logout link if logged in
   const userId = localStorage.getItem('userId');
   const role = localStorage.getItem('role');
 
   return (
     <div className="login-container">
       <h2 className="login-title">Login</h2>
+
       {userId && (
         <div className="login-footer">
           <p className="login-footer-text">
             Welcome, {role === 'customer' ? 'Customer' : 'Manager'}!{' '}
-            <Link to="/logout" className="login-logout-link">Logout</Link>
+            <Link to="/logout" className="login-logout-link">
+              Logout
+            </Link>
           </p>
         </div>
       )}
+
       {!userId && (
         <div className="login-form">
           <div className="login-form-group">
-            <label className="login-form-label">{!isManager ? 'Email (Customer)' : 'Name (Manager)'}</label>
+            <label className="login-form-label">
+              {!isManager ? 'Email (Customer)' : 'Name (Manager)'}
+            </label>
             {!isManager ? (
               <input
                 type="email"
@@ -72,6 +91,7 @@ const Login = ({ onClose }) => {
               />
             )}
           </div>
+
           <div className="login-form-group">
             <label className="login-form-label">Password</label>
             <input
@@ -83,6 +103,7 @@ const Login = ({ onClose }) => {
               required
             />
           </div>
+
           <div className="login-form-group">
             <label className="login-form-label login-flex items-center">
               <input
@@ -94,6 +115,7 @@ const Login = ({ onClose }) => {
               Login as Manager
             </label>
           </div>
+
           {isManager && (
             <div className="login-form-group">
               <label className="login-form-label">Bank Name</label>
@@ -107,9 +129,11 @@ const Login = ({ onClose }) => {
               />
             </div>
           )}
+
           <button onClick={handleLogin} className="login-form-button">
             Login
           </button>
+
           {message && <p className="login-form-message">{message}</p>}
         </div>
       )}
