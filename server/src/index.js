@@ -3,7 +3,8 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const authRoutes = require('./routes/auth');
 require('dotenv').config();
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
+
 
 console.log('EMAIL_USER:', process.env.EMAIL_USER); // Should print your email
 console.log('EMAIL_PASS:', process.env.EMAIL_PASS); // Should print your password
