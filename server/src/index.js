@@ -1,8 +1,9 @@
 const express = require('express');
+require('dotenv').config();
 const mongoose = require('mongoose');
 const cors = require('cors');
 const authRoutes = require('./routes/auth');
-require('dotenv').config();
+
 const bcrypt = require('bcryptjs');
 
 console.log('EMAIL_USER:', process.env.EMAIL_USER); // Should print your email
